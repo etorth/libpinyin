@@ -2172,7 +2172,9 @@ static bool _check_offset(PhoneticKeyMatrix & matrix, size_t offset) {
         if (1 == size) {
             /* assume only one zero ChewingKey "'" here, but no check. */
             matrix.get_item(index, 0, key, key_rest);
-            assert(zero_key != key);
+            /* assume the zero Chewing Key "'" is also validated. */
+            if (zero_key != key)
+                return false;
         }
     }
 
