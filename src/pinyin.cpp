@@ -2173,7 +2173,7 @@ static bool _check_offset(PhoneticKeyMatrix & matrix, size_t offset) {
             /* assume only one zero ChewingKey "'" here, but no check. */
             matrix.get_item(index, 0, key, key_rest);
             /* assume the zero Chewing Key "'" is also validated. */
-            if (zero_key != key)
+            if (zero_key == key)
                 return false;
         }
     }
@@ -3022,7 +3022,7 @@ bool pinyin_get_pinyin_offset(pinyin_instance_t * instance,
     }
 
     offset = _compute_zero_start(matrix, offset);
-    _check_offset(matrix, offset);
+    assert(_check_offset(matrix, offset));
 
     *poffset = offset;
     return true;
@@ -3032,7 +3032,7 @@ bool pinyin_get_left_pinyin_offset(pinyin_instance_t * instance,
                                    size_t offset,
                                    size_t * pleft) {
     PhoneticKeyMatrix & matrix = instance->m_matrix;
-    _check_offset(matrix, offset);
+    assert(_check_offset(matrix, offset));
 
     /* find the ChewingKey ends at offset. */
     size_t left = offset > 0 ? offset - 1 : 0;
@@ -3054,7 +3054,7 @@ bool pinyin_get_left_pinyin_offset(pinyin_instance_t * instance,
     }
 
     left = _compute_zero_start(matrix, left);
-    _check_offset(matrix, left);
+    assert(_check_offset(matrix, left));
 
     *pleft = left;
     return true;
@@ -3064,7 +3064,7 @@ bool pinyin_get_right_pinyin_offset(pinyin_instance_t * instance,
                                     size_t offset,
                                     size_t * pright) {
     PhoneticKeyMatrix & matrix = instance->m_matrix;
-    _check_offset(matrix, offset);
+    assert(_check_offset(matrix, offset));
 
     /* find the first non-zero ChewingKey. */
     size_t right = offset;
@@ -3089,7 +3089,7 @@ bool pinyin_get_right_pinyin_offset(pinyin_instance_t * instance,
 
     matrix.get_item(right, 0, key, key_rest);
     right = key_rest.m_raw_end;
-    _check_offset(matrix, right);
+    assert(_check_offset(matrix, right));
 
     *pright = right;
     return true;
@@ -3201,7 +3201,7 @@ bool pinyin_get_character_offset(pinyin_instance_t * instance,
         return false;
 
     assert(offset < matrix.size());
-    _check_offset(matrix, offset);
+    assert(_check_offset(matrix, offset));
 
     if (NULL == phrase)
         return false;
